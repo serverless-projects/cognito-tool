@@ -4,26 +4,24 @@
 
 const meow = require('meow');
 const AWS = require('aws-sdk');
+const cognitoIsp = new AWS.CognitoIdentityServiceProvider();
 const bluebird = require('bluebird');
 const fs = require('fs');
-const path = require('path');
 const sanitizeFilename = require('sanitize-filename');
 const JSONStream = require('JSONStream');
-const streamToPromise = require('stream-to-promise');
-const debug = require('debug')('cognito-backup');
+const debug = require('debug')('cognito-cli');
 const mkdirp = bluebird.promisify(require('mkdirp'));
 const assert = require('assert');
 
 const cli = meow(`
     Usage
-      $ cognito-backup backup-users <user-pool-id> <options>  Backup all users in a single user pool
-      $ cognito-backup backup-all-users <options>  Backup all users in all user pools for this account
+      $ cognito-cli backup-users <user-pool-id> <options>  Backup all users in a single user pool
+      $ cognito-cli backup-all-users <options>  Backup all users in all user pools for this account
 
       AWS_ACCESS_KEY_ID , AWS_SECRET_ACCESS_KEY and AWS_REGION (optional for assume role: AWS_SESSION_TOKEN)
       is specified in env variables or ~/.aws/credentials
 
     Options
-      --file File name to export single pool users to (defaults to user-pool-id.json)
       --dir Path to export all pools, all users to (defaults to current dir)
 `);
 
@@ -43,27 +41,22 @@ bluebird.resolve(method.call(undefined, cli))
 
 function backupUsersCli(cli) {
     const userPoolId = cli.input[1];
-    const file = cli.flags.file;
-    const file2 = file || sanitizeFilename(getFilename(userPoolId));
+    const file = sanitizeFilename(getFilename(userPoolId));
 
     if (!userPoolId) {
         console.error('user-pool-id is required');
         cli.showHelp();
     }
 
-    const cognitoIsp = new AWS.CognitoIdentityServiceProvider();
-
-    return backupUsers(cognitoIsp, userPoolId, file2);
+    return backupUsers(cognitoIsp, userPoolId, file);
 }
 
 function backupAllUsersCli(cli) {
     const dir = cli.flags.dir || '.';
 
-    const cognitoIsp = new AWS.CognitoIdentityServiceProvider();
-
     return mkdirp(dir)
         .then(() => bluebird.mapSeries(listUserPools(), userPoolId => {
-            const file = path.join(dir, getFilename(userPoolId));
+            const file = sanitizeFilename(getFilename(userPoolId));
             console.error(`Exporting ${userPoolId} to ${file}`);
             return backupUsers(cognitoIsp, userPoolId, file);
         }));
@@ -74,8 +67,6 @@ function getFilename(userPoolId) {
 }
 
 function listUserPools() {
-    const cognitoIsp = new AWS.CognitoIdentityServiceProvider();
-
     return cognitoIsp.listUserPools({
             MaxResults: 60
         }).promise()
@@ -98,23 +89,10 @@ function backupUsers(cognitoIsp, userPoolId, file) {
     const params = {
         UserPoolId: userPoolId
     };
-    const page = () => {
-        debug(`Fetching users - page: ${params.PaginationToken || 'first'}`);
-        return bluebird.resolve(cognitoIsp.listUsers(params).promise())
-            .then(data => {
-                data.Users.forEach(item => stringify.write(item));
-
-                if (data.PaginationToken !== undefined) {
-                    params.PaginationToken = data.PaginationToken;
-                    return page();
-                }
-            });
-    }
-
-    return page()
-        .finally(() => {
-            stringify.end();
-            return streamToPromise(stringify);
-        })
-        .finally(() => writeStream.end());
+    cognitoIsp.listUsers(params, function(err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else {
+            data.Users.forEach(item => stringify.write(item));
+        }
+    });
 }
