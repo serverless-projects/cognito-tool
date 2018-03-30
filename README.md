@@ -22,6 +22,7 @@ $ cognito-tool backup-users eu-west-1_1_12345
 $ cat eu-west-1_1_12345.json
 
 $ cognito-tool backup-all-users eu-west-1_1_12345 --dir 20180326
+$ cd 20180326
 $ cat eu-west-1_1_12345.json
 
 # Nominate region if not set in environment variable or ~/.aws/credentials
