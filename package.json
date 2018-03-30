@@ -1,7 +1,7 @@
 {
   "name": "cognito-tool",
   "version": "2.0.3",
-  "description": "CLI for backing up and retore AWS Cogntito User Pools",
+  "description": "CLI for backing up and restore AWS Cogntito User Pools",
   "main": "cli.js",
   "scripts": {
     "lint": "eslint ."
