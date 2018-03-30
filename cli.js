@@ -9,14 +9,14 @@ const bluebird = require('bluebird');
 const fs = require('fs');
 const sanitizeFilename = require('sanitize-filename');
 const JSONStream = require('JSONStream');
-const debug = require('debug')('cognito-cli');
+const debug = require('debug')('cognito-tool');
 const mkdirp = bluebird.promisify(require('mkdirp'));
 const assert = require('assert');
 
 const cli = meow(`
     Usage
-      $ cognito-cli backup-users <user-pool-id> <options>  Backup all users in a single user pool
-      $ cognito-cli backup-all-users <options>  Backup all users in all user pools for this account
+      $ cognito-tool backup-users <user-pool-id> <options>  Backup all users in a single user pool
+      $ cognito-tool backup-all-users <options>  Backup all users in all user pools for this account
 
       AWS_ACCESS_KEY_ID , AWS_SECRET_ACCESS_KEY and AWS_REGION (optional for assume role: AWS_SESSION_TOKEN)
       is specified in env variables or ~/.aws/credentials

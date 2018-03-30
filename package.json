@@ -1,5 +1,5 @@
 {
-  "name": "cognito-cli",
+  "name": "cognito-tool",
   "version": "2.0.1",
   "description": "CLI for backing up and retore AWS Cogntito User Pools",
   "main": "cli.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/serverless-projects/cognito-cli.git"
+    "url": "https://github.com/serverless-projects/cognito-tool.git"
   },
   "author": {
     "name": "Bill Wang, Mikael Finstad",
@@ -20,7 +20,7 @@
     "cli.js"
   ],
   "bin": {
-    "cognito-cli": "cli.js"
+    "cognito-tool": "cli.js"
   },
   "engines": {
     "node": ">=4"
