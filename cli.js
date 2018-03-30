@@ -117,9 +117,7 @@ function restore(cli) {
     const userPoolId = cli.input[1];
     const file = cli.flags.file
 
-    var users = {
-        table: []
-    };
+    var new_attributes = [];
 
     if (!userPoolId || !file) {
         console.error('user-pool-id or input file is required');
@@ -130,19 +128,29 @@ function restore(cli) {
         if (err) {
             console.log(err);
         } else {
-            users = JSON.parse(data);
-            users.forEach(function(value) {
+            var users = JSON.parse(data);
+            users.forEach(function(user) {
+
+                // sub is non-mutable attribute
+                var attributes = user.Attributes;
+                attributes.forEach(function(attribute) {
+                  if (attribute.Name != "sub") {
+                     new_attributes.push(attribute);
+                  }
+                });
+
+                // create users
                 var params = {
                     UserPoolId: userPoolId,
-                    Username: value.Username,
+                    Username: user.Username,
                     DesiredDeliveryMediums: ['EMAIL'],
                     ForceAliasCreation: false,
                     TemporaryPassword: 'P@ssw@rd1234',
-                    UserAttributes: value.Attributes
+                    UserAttributes: new_attributes
                 };
                 cognitoIsp.adminCreateUser(params, function(err, data) {
-                    if (err) console.log(err, err.stack); // an error occurred
-                    else console.log(data); // successful response
+                    if (err) console.log(err, err.stack);
+                    else console.log(data);
                 });
 
             });
