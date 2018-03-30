@@ -11,6 +11,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+[![npm version](https://badge.fury.io/js/cognito-tool.svg)](https://badge.fury.io/js/cognito-tool)
+
 # cognito-tool 👫→💾
 Amazon doesn't have any way of backing up and restore heir AWS Cognito User Pools.
 cognito-tool is a CLI for backing up and restore the data. <b>Note: AWS has no way of extracting the passwords of your users so you need to store these separately 😵</b>
