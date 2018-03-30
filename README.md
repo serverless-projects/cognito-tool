@@ -15,9 +15,9 @@
 Amazon doesn't have any way of backing up and restore heir AWS Cognito User Pools.
 cognito-tool is a CLI for backing up and restore the data. <b>Note: AWS has no way of extracting the passwords of your users so you need to store these separately 😵</b>
 
-This repo is forked from  [mifi/cognito-backup](https://github.com/mifi/cognito-backup) with restore features
+This repo is forked from  [mifi/cognito-backup](https://github.com/mifi/cognito-backup) and added restore features
 
-1) package name change from `cognito-backup` to `cognito-tool` to adapt the new functions which are not only focus on backup task
+1) package name change from `cognito-backup` to `cognito-tool` to adapt the new functions which are not only focus on backup tasks
 2) when restore, set the default password to `P@ssw@rd1234`
 
 ## Install
