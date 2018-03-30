@@ -136,9 +136,9 @@ function restore(cli) {
                 // sub is non-mutable attribute
                 var attributes = user.Attributes;
                 attributes.forEach(function(attribute) {
-                  if (attribute.Name != "sub") {
-                     new_attributes.push(attribute);
-                  }
+                    if (attribute.Name != "sub") {
+                        new_attributes.push(attribute);
+                    }
                 });
 
                 // create users
