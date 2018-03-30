@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [cognito-tool 👫→💾](#cognito-tool-%E2%86%92)
+  - [Install](#install)
+  - [Usage](#usage)
+  - [Examples](#examples)
+    - [Backup](#backup)
+    - [Restore](#restore)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # cognito-tool 👫→💾
 Amazon doesn't have any way of backing up and restore heir AWS Cognito User Pools.
 cognito-tool is a CLI for backing up and restore the data. <b>Note: AWS has no way of extracting the passwords of your users so you need to store these separately 😵</b>
