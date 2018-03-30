@@ -9,6 +9,7 @@ const bluebird = require('bluebird');
 const fs = require('fs');
 const sanitizeFilename = require('sanitize-filename');
 const JSONStream = require('JSONStream');
+const streamToPromise = require('stream-to-promise');
 const debug = require('debug')('cognito-tool');
 const mkdirp = bluebird.promisify(require('mkdirp'));
 const assert = require('assert');
@@ -18,7 +19,8 @@ const cli = meow(`
       $ cognito-tool backup-users <user-pool-id> <options>  Backup all users in a single user pool
       $ cognito-tool backup-all-users <options>  Backup all users in all user pools for this account
 
-      AWS_ACCESS_KEY_ID , AWS_SECRET_ACCESS_KEY and AWS_REGION (optional for assume role: AWS_SESSION_TOKEN)
+      AWS_ACCESS_KEY_ID , AWS_SECRET_ACCESS_KEY and AWS_REGION
+        (optional for assume role: AWS_SESSION_TOKEN)
       is specified in env variables or ~/.aws/credentials
 
     Options
@@ -28,6 +30,7 @@ const cli = meow(`
 const methods = {
     'backup-users': backupUsersCli,
     'backup-all-users': backupAllUsersCli,
+    'restore': restore,
 };
 
 const method = methods[cli.input[0]] || cli.showHelp();
@@ -89,10 +92,65 @@ function backupUsers(cognitoIsp, userPoolId, file) {
     const params = {
         UserPoolId: userPoolId
     };
-    cognitoIsp.listUsers(params, function(err, data) {
-        if (err) console.log(err, err.stack); // an error occurred
-        else {
-            data.Users.forEach(item => stringify.write(item));
+    const page = () => {
+        debug(`Fetching users - page: ${params.PaginationToken || 'first'}`);
+        return bluebird.resolve(cognitoIsp.listUsers(params).promise())
+            .then(data => {
+                data.Users.forEach(item => stringify.write(item));
+
+                if (data.PaginationToken !== undefined) {
+                    params.PaginationToken = data.PaginationToken;
+                    return page();
+                }
+            });
+    }
+
+    return page()
+        .finally(() => {
+            stringify.end();
+            return streamToPromise(stringify);
+        })
+        .finally(() => writeStream.end());
+}
+
+function restore(cli) {
+    const userPoolId = cli.input[1];
+    const file = cli.flags.file
+
+    var users = {
+        table: []
+    };
+
+    if (!userPoolId || !file) {
+        console.error('user-pool-id or input file is required');
+        cli.showHelp();
+    }
+
+    fs.readFile(file, 'utf8', function readFileCallback(err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            users = JSON.parse(data); //now it an object
+            users.forEach(function(value) {
+                console.log(value);
+                console.log(value.Username);
+                console.log(value.Attributes);
+
+                var params = {
+                    UserPoolId: userPoolId,
+                    Username: value.Username,
+                    DesiredDeliveryMediums: ['EMAIL'],
+                    ForceAliasCreation: false,
+                    TemporaryPassword: 'P@ssw@rd',
+                    UserAttributes: value.Attributes
+                };
+                cognitoIsp.adminCreateUser(params, function(err, data) {
+                    if (err) console.log(err, err.stack); // an error occurred
+                    else console.log(data); // successful response
+                });
+
+            });
         }
     });
+
 }
