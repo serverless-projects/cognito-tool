@@ -5,7 +5,8 @@
   "main": "cli.js",
   "scripts": {
     "push": "rm -f package-lock.json; npm version patch; npm publish",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "eslint ."
   },
   "repository": {
     "type": "git",
