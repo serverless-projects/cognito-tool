@@ -16,15 +16,17 @@ const assert = require('assert');
 
 const cli = meow(`
     Usage
-      $ cognito-tool backup-users <user-pool-id> <options>  Backup all users in a single user pool
+      $ cognito-tool backup-users <user-pool-id> <option>  Backup all users in a single user pool
       $ cognito-tool backup-all-users <options>  Backup all users in all user pools for this account
+      $ cognito-tool restore <user-pool-id> --file <JSON_user_file> Restore users to a single user pool
 
       AWS_ACCESS_KEY_ID , AWS_SECRET_ACCESS_KEY and AWS_REGION
         (optional for assume role: AWS_SESSION_TOKEN)
       is specified in env variables or ~/.aws/credentials
 
     Options
-      --dir Path to export all pools, all users to (defaults to current dir)
+      --dir Path to export all pools, all users to (defaults to current dir), only for backup
+      --file Path to file with user details, only for retore 
 `);
 
 const methods = {
