@@ -130,12 +130,8 @@ function restore(cli) {
         if (err) {
             console.log(err);
         } else {
-            users = JSON.parse(data); //now it an object
+            users = JSON.parse(data);
             users.forEach(function(value) {
-                console.log(value);
-                console.log(value.Username);
-                console.log(value.Attributes);
-
                 var params = {
                     UserPoolId: userPoolId,
                     Username: value.Username,

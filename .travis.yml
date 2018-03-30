@@ -1,0 +1,10 @@
+language: node_js
+
+node_js:
+  - "8"
+
+lint:
+  - npm run lint
+
+publish:
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then npm run push; fi
