@@ -141,7 +141,7 @@ function restore(cli) {
                     Username: value.Username,
                     DesiredDeliveryMediums: ['EMAIL'],
                     ForceAliasCreation: false,
-                    TemporaryPassword: 'P@ssw@rd',
+                    TemporaryPassword: 'P@ssw@rd1234',
                     UserAttributes: value.Attributes
                 };
                 cognitoIsp.adminCreateUser(params, function(err, data) {
