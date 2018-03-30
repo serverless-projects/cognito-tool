@@ -4,8 +4,7 @@
   "description": "CLI for backing up and restore AWS Cogntito User Pools",
   "main": "cli.js",
   "scripts": {
-    "lint": "eslint .",
-    "publish": "npm version patch; npm publish"
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
