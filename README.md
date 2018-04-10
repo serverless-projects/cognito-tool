@@ -19,8 +19,9 @@ cognito-tool is a CLI for backing up and restore the data. <b>Note: AWS has no w
 
 This repo is forked from  [mifi/cognito-backup](https://github.com/mifi/cognito-backup) and added restore features
 
-1) package name change from `cognito-backup` to `cognito-tool` to adapt the new functions which are not only focus on backup tasks
-2) when restore, set the default password to `P@ssw@rd1234`
+1) Package name change from `cognito-backup` to `cognito-tool` to adapt the new functions which are not only focus on backup tasks
+2) When restore, set the default password to `P@ssw@rd1234`
+3) When restore, user's sub (The UUID of the authenticated user) is unique, can't be restored. AWS will create new sub for each cognito user.
 
 ## Install
 ```
