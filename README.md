@@ -15,15 +15,16 @@
 [![npm version](https://badge.fury.io/js/cognito-tool.svg)](https://badge.fury.io/js/cognito-tool)
 
 # cognito-tool
-Amazon doesn't have any way of backing up and restore heir AWS Cognito User Pools.
-cognito-tool is a CLI for backing up and restore the data. <b>Note: AWS has no way of extracting the passwords of your users so you need to store these separately</b>
+Amazon doesn't have any ways of backing up and restore heir AWS Cognito User Pools currently.
+
+`cognito-tool` is a CLI for backing up and restoring the users. <b>Note: AWS has no way of extracting the passwords of cognito users</b>
 
 This repo is forked from  [mifi/cognito-backup](https://github.com/mifi/cognito-backup) and added restore features. Package name is changed from `cognito-backup` to `cognito-tool` to adapt the new functions which are not only focus on backup tasks
 
 ## Notes for cognito user restore
 
-1) When restore, this tool sets the default password to `P@ssw@rd1234` to all cognito users.
-2) When restore, user's `sub` (The UUID of the cognito user) is unique in aws, the original sub can't be restored. New sub will be set when restoring.
+1) When restoring, this tool sets the default password to `P@ssw@rd1234` to all cognito users.
+2) Cognito user's `sub` (The UUID of the cognito user) is unique in aws globally. When restoring, the original sub can't be restored. New sub will be set when restoring.
 
 ## Install
 ```
