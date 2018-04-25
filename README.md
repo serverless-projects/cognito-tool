@@ -2,7 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [cognito-tool 👫→💾](#cognito-tool-%E2%86%92)
+- [cognito-tool](#cognito-tool)
+  - [Notes for cognito user restore](#notes-for-cognito-user-restore)
   - [Install](#install)
   - [Usage](#usage)
   - [Examples](#examples)
@@ -13,15 +14,16 @@
 
 [![npm version](https://badge.fury.io/js/cognito-tool.svg)](https://badge.fury.io/js/cognito-tool)
 
-# cognito-tool 👫→💾
+# cognito-tool
 Amazon doesn't have any way of backing up and restore heir AWS Cognito User Pools.
-cognito-tool is a CLI for backing up and restore the data. <b>Note: AWS has no way of extracting the passwords of your users so you need to store these separately 😵</b>
+cognito-tool is a CLI for backing up and restore the data. <b>Note: AWS has no way of extracting the passwords of your users so you need to store these separately</b>
 
-This repo is forked from  [mifi/cognito-backup](https://github.com/mifi/cognito-backup) and added restore features
+This repo is forked from  [mifi/cognito-backup](https://github.com/mifi/cognito-backup) and added restore features. Package name is changed from `cognito-backup` to `cognito-tool` to adapt the new functions which are not only focus on backup tasks
 
-1) Package name change from `cognito-backup` to `cognito-tool` to adapt the new functions which are not only focus on backup tasks
-2) When restore, set the default password to `P@ssw@rd1234`
-3) When restore, user's sub (The UUID of the authenticated user) is unique, can't be restored. AWS will create new sub for each cognito user.
+## Notes for cognito user restore
+
+1) When restore, this tool sets the default password to `P@ssw@rd1234` to all cognito users.
+2) When restore, user's `sub` (The UUID of the cognito user) is unique in aws, the original sub can't be restored. New sub will be set when restoring.
 
 ## Install
 ```
